@@ -18,13 +18,13 @@ use them (`yarn build`, `yarn lint`, `yarn typecheck`, `yarn test`).
 - The repo targets Node `16 || 18 || 20` (CI uses those). The base VM image's
   default `node` on `PATH` (`/exec-daemon/node`) is **Node 22**, which is _not_
   a CI-validated version. `/exec-daemon` is force-prepended to `PATH` on every
-  command, so a bare `nvm use 20` is **not** enough — the daemon's Node 22 still
-  wins. The Cloud Agent environment therefore installs Node 20 via `nvm` and
-  symlinks `node`/`npm`/`npx`/`yarn` into `/usr/local/cargo/bin` (the only
-  writable directory that precedes `/exec-daemon` on `PATH`), so `node -v`
-  reports v20 and `yarn` is Yarn Classic in every shell. If you ever see Node
-  22, re-run the environment `install` command, or recreate the symlinks
-  manually, e.g.:
+  command, so the Node 20 bin must come **ahead of** `/exec-daemon` to win — a
+  bare `nvm use 20` is not enough for non-interactive shells. The Cloud Agent
+  environment installs Node 20 via `nvm` and symlinks
+  `node`/`npm`/`npx`/`yarn` into `/usr/local/cargo/bin` (the only writable
+  directory that precedes `/exec-daemon` on `PATH`), so `node -v` reports v20
+  and `yarn` is Yarn Classic in every shell. If you ever see Node 22, re-run the
+  environment `install` command, or recreate the symlinks manually, e.g.:
 
   ```
   export NVM_DIR="$HOME/.nvm"; . "$NVM_DIR/nvm.sh"; nvm use 20
